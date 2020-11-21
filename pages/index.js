@@ -1,8 +1,24 @@
 import * as React from "react";
 import Head from "next/head";
+import useSWR from "swr";
 import { useDropzone } from "react-dropzone";
 
 export default function Home() {
+  const createImage = (imageUrl, time) => {
+    console.log("Home -> imageUrl", imageUrl);
+    try {
+      fetch("/api/createImage", {
+        method: "POST",
+        body: JSON.stringify({ imageUrl, time }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const uploadHandler = (files) => {
     const url = `https://api.cloudinary.com/v1_1/koda-studio/image/upload`;
     const formData = new FormData();
@@ -15,10 +31,10 @@ export default function Home() {
         body: formData,
       })
         .then((response) => {
-          return response.text();
+          return response.json();
         })
         .then((data) => {
-          console.log(data);
+          createImage(data.url, 180000);
         });
     });
   };
@@ -28,6 +44,8 @@ export default function Home() {
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const { data: images } = useSWR("/api/images");
 
   return (
     <div className="min-h-screen overflow-hidden bg-gray-100 rounded-lg">
@@ -81,7 +99,7 @@ export default function Home() {
                             </p>
                           ) : (
                             <p className="mt-1 text-sm text-gray-600">
-                              <span class="bg-white cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                              <span className="font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Click
                               </span>{" "}
                               or drop files to upload
@@ -99,43 +117,49 @@ export default function Home() {
             </div>
             {/* Uploader End */}
 
-            {/* Items Start */}
-            <div className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6">
-              <div className="grid sm:grid-cols-2">
-                {/* Image start */}
-                <div className="w-40 h-40 overflow-hidden bg-gray-500 sm:rounded-md">
-                  <img
-                    src="https://source.unsplash.com/random"
-                    alt="random"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                {/* Image end */}
-                {/* Input Start */}
-                <div className="max-w-xs mt-5 sm:ml-auto sm:mt-0">
-                  <label
-                    htmlFor="minutes"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Draw for...
-                  </label>
-                  <div className="relative flex mt-1 rounded-md shadow-sm">
-                    <input
-                      type="number"
-                      id="minutes"
-                      className="relative z-20 flex-1 block w-full px-3 py-2 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
-                      placeholder="3"
-                    />
-                    <span className="relative z-10 inline-flex items-center px-3 text-gray-500 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 sm:text-sm">
-                      minutes
-                    </span>
-                  </div>
-                </div>
+            {!images && <div>Loading...</div>}
+            {images &&
+              images.map((image) => (
+                <article
+                  className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6"
+                  key={image.id}
+                >
+                  <div className="grid sm:grid-cols-2">
+                    {/* Image start */}
+                    <div className="w-40 h-40 overflow-hidden bg-gray-500 sm:rounded-md">
+                      <img
+                        src={image.data.image_url}
+                        alt="random"
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                    {/* Image end */}
+                    {/* Input Start */}
+                    <div className="max-w-xs mt-5 sm:ml-auto sm:mt-0">
+                      <label
+                        htmlFor="minutes"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Draw for...
+                      </label>
+                      <div className="relative flex mt-1 rounded-md shadow-sm">
+                        <input
+                          type="number"
+                          id="minutes"
+                          className="relative z-20 flex-1 block w-full px-3 py-2 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
+                          placeholder="3"
+                          // value={image.data.time / 60000}
+                        />
+                        <span className="relative z-10 inline-flex items-center px-3 text-gray-500 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 sm:text-sm">
+                          minutes
+                        </span>
+                      </div>
+                    </div>
 
-                {/* Input End */}
-              </div>
-            </div>
-            {/* Items End */}
+                    {/* Input End */}
+                  </div>
+                </article>
+              ))}
 
             {/* Actions Start */}
             <div className="flex justify-end">

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postbuild": "next-on-netlify"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.2.0",
@@ -14,6 +15,7 @@
     "autoprefixer": "^10.0.2",
     "faunadb": "^4.0.0",
     "next": "10.0.1",
+    "next-on-netlify": "^2.6.3",
     "postcss": "^8.1.7",
     "postcss-flexbugs-fixes": "^5.0.1",
     "postcss-preset-env": "^6.7.0",

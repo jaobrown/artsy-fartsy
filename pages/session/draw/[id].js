@@ -2,8 +2,8 @@ import * as React from "react";
 import Head from "next/head";
 import { useTimer } from "react-timer-hook";
 
-import { getSessionById } from "../../utils/fauna";
-import { useIncrement } from "../../hooks";
+import { getSessionById } from "../../../utils/fauna";
+import { useIncrement } from "../../../hooks";
 
 const Timer = ({ expiryTimestamp, onExpire }) => {
   const {

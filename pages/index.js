@@ -21,7 +21,7 @@ export default function Home() {
               All Sessions
             </h1>
             <div className="mt-3 sm:mt-0 sm:ml-4">
-              <Link href="/all-images">
+              <Link href="/session/new">
                 <a className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   Create new session
                 </a>
@@ -42,7 +42,7 @@ export default function Home() {
                   });
                   return (
                     <li key={session.id}>
-                      <Link href={`/draw/${session.id}`}>
+                      <Link href={`/session/draw/${session.id}`}>
                         <a className="block hover:bg-gray-50">
                           <div className="flex items-center px-4 py-4 sm:px-6">
                             <div className="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between">

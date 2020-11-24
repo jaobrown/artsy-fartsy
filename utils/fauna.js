@@ -6,32 +6,32 @@ const q = faunadb.query;
 // Images
 //
 
-const getImages = async () => {
-  const { data } = await faunaClient.query(
-    q.Map(
-      q.Paginate(q.Documents(q.Collection("images"))),
-      q.Lambda("ref", q.Get(q.Var("ref")))
-    )
-  );
+// const getImages = async () => {
+//   const { data } = await faunaClient.query(
+//     q.Map(
+//       q.Paginate(q.Documents(q.Collection("images"))),
+//       q.Lambda("ref", q.Get(q.Var("ref")))
+//     )
+//   );
 
-  const images = data.map((image) => {
-    image.id = image.ref.id;
-    delete image.ref;
-    return image;
-  });
+//   const images = data.map((image) => {
+//     image.id = image.ref.id;
+//     delete image.ref;
+//     return image;
+//   });
 
-  return images;
-};
+//   return images;
+// };
 
-const createImage = async (image_url) => {
-  return await faunaClient.query(
-    q.Create(q.Collection("images"), { data: { image_url } })
-  );
-};
+// const createImage = async (image_url) => {
+//   return await faunaClient.query(
+//     q.Create(q.Collection("images"), { data: { image_url } })
+//   );
+// };
 
-const deleteImage = async (id) => {
-  return await faunaClient.query(q.Delete(q.Ref(q.Collection("images"), id)));
-};
+// const deleteImage = async (id) => {
+//   return await faunaClient.query(q.Delete(q.Ref(q.Collection("images"), id)));
+// };
 
 //
 // Sessions
@@ -70,9 +70,9 @@ const getSessionById = async (id) => {
 };
 
 module.exports = {
-  getImages,
-  createImage,
-  deleteImage,
+  // getImages,
+  // createImage,
+  // deleteImage,
   getSessions,
   createSession,
   getSessionById,

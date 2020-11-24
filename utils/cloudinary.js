@@ -1,9 +1,10 @@
+const cloudinary = require("cloudinary");
+
 const deleteImage = async (id) => {
-  const cloudinary = require("cloudinary");
   cloudinary.config({
     cloud_name: "koda-studio",
-    api_key: "443696937154359",
-    api_secret: "8S2xfjTVcEWxls8lqt5LGGb-Nug",
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
   });
 
   cloudinary.v2.uploader.destroy(id);

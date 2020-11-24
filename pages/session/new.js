@@ -26,7 +26,6 @@ export default function New() {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
           uploadedImages.push({
             public_id: data.public_id,
             url: data.url,
@@ -39,24 +38,26 @@ export default function New() {
 
   // Cancel - deletes uploaded images from cloudinary, pushes to home
   const cancel = async () => {
-    await images.map((image) => {
-      try {
-        fetch("/api/deleteImage", {
-          method: "POST",
-          body: JSON.stringify(image),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    });
+    if (images.length > 0) {
+      await images.map((image) => {
+        try {
+          fetch("/api/deleteImage", {
+            method: "POST",
+            body: JSON.stringify(image),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
     router.push("/");
   };
 
   // Save to session
-  const save = async (data) => {
+  const save = async (data, destination = "/") => {
     try {
       fetch("/api/createSession", {
         method: "POST",
@@ -68,7 +69,7 @@ export default function New() {
     } catch (err) {
       console.error(err);
     }
-    router.push("/");
+    router.push(destination);
   };
 
   // Drop zone setup
@@ -99,13 +100,15 @@ export default function New() {
                 Cancel
               </button>
 
-              <button
-                type="submit"
-                form="create-session-form"
-                className="inline-flex items-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Save
-              </button>
+              {images.length > 0 && (
+                <button
+                  type="submit"
+                  form="create-session-form"
+                  className="inline-flex items-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Save and return
+                </button>
+              )}
             </div>
             {/* Actions end */}
           </div>
@@ -172,8 +175,7 @@ export default function New() {
           {/* Upload end */}
 
           <div className="mt-5">
-            {!images && <div>Upload images to start!</div>}
-            {images && (
+            {images.length > 0 && (
               <form
                 onSubmit={handleSubmit(save)}
                 className="space-y-5"
@@ -233,12 +235,6 @@ export default function New() {
                 ))}
                 {/* Actions Start */}
                 <div className="flex justify-end">
-                  {/* <button
-                type="button"
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                Delete All
-              </button> */}
                   <button
                     type="submit"
                     form="create-session-form"

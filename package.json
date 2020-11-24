@@ -13,6 +13,7 @@
     "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/typography": "^0.3.1",
     "autoprefixer": "^10.0.2",
+    "cloudinary": "^1.23.0",
     "faunadb": "^4.0.0",
     "next": "10.0.1",
     "next-on-netlify": "^2.6.3",

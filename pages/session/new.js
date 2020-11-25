@@ -2,18 +2,18 @@ import * as React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useDropzone } from "react-dropzone";
-import { useForm } from "react-hook-form";
+
+import Form from "../../features/Session/Form";
 
 export default function New() {
   const router = useRouter();
-  const { register, handleSubmit, errors } = useForm();
   const [images, setImages] = React.useState([]);
 
   // Upload (called on file drop)
   const upload = async (files) => {
     const url = `https://api.cloudinary.com/v1_1/koda-studio/image/upload`;
     const formData = new FormData();
-    const uploadedImages = [];
+    // const uploadedImages = [];
     await files.map((file) => {
       formData.append("file", file);
       formData.append("upload_preset", "unsigned");
@@ -26,14 +26,21 @@ export default function New() {
           return response.json();
         })
         .then((data) => {
-          uploadedImages.push({
-            public_id: data.public_id,
-            url: data.url,
-            signature: data.signature,
-          });
+          // uploadedImages.push({
+          //   public_id: data.public_id,
+          //   url: data.url,
+          //   signature: data.signature,
+          // });
+          setImages((images) => [
+            ...images,
+            {
+              public_id: data.public_id,
+              url: data.url,
+              signature: data.signature,
+            },
+          ]);
         });
     });
-    setImages(uploadedImages);
   };
 
   // Cancel - deletes uploaded images from cloudinary, pushes to home
@@ -57,7 +64,7 @@ export default function New() {
   };
 
   // Save to session
-  const save = async (data, destination = "/") => {
+  const save = async (data) => {
     try {
       fetch("/api/createSession", {
         method: "POST",
@@ -69,7 +76,7 @@ export default function New() {
     } catch (err) {
       console.error(err);
     }
-    router.push(destination);
+    router.push("/");
   };
 
   // Drop zone setup
@@ -175,77 +182,7 @@ export default function New() {
           {/* Upload end */}
 
           <div className="mt-5">
-            {images.length > 0 && (
-              <form
-                onSubmit={handleSubmit(save)}
-                className="space-y-5"
-                id="create-session-form"
-              >
-                {images.map((image, idx) => (
-                  <div
-                    className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6"
-                    key={idx}
-                  >
-                    <div className="grid sm:grid-cols-2">
-                      {/* Image start */}
-                      <div className="w-40 h-40 overflow-hidden bg-gray-500 sm:rounded-md">
-                        <img
-                          src={image.url}
-                          alt="random"
-                          className="object-cover w-full h-full"
-                        />
-                        <span className="sr-only">
-                          <label htmlFor={`images[${idx}][image]`}>image</label>
-                          <input
-                            type="url"
-                            id={`images[${idx}][image]`}
-                            name={`images[${idx}][image]`}
-                            ref={register({ required: true })}
-                            defaultValue={image.url}
-                          />
-                        </span>
-                      </div>
-                      {/* Image end */}
-                      {/* Input Start */}
-                      <div className="max-w-xs mt-5 sm:ml-auto sm:mt-0">
-                        <label
-                          htmlFor={`images[${idx}][time]`}
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Draw for...
-                        </label>
-                        <div className="relative flex mt-1 rounded-md shadow-sm">
-                          <input
-                            type="number"
-                            id={`images[${idx}][time]`}
-                            className="relative z-20 flex-1 block w-full px-3 py-2 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
-                            placeholder="3"
-                            name={`images[${idx}][time]`}
-                            ref={register({ required: true })}
-                          />
-                          <span className="relative z-10 inline-flex items-center px-3 text-gray-500 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 sm:text-sm">
-                            minutes
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Input End */}
-                    </div>
-                  </div>
-                ))}
-                {/* Actions Start */}
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    form="create-session-form"
-                    className="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Start Drawing
-                  </button>
-                </div>
-                {/* Actions End */}
-              </form>
-            )}
+            <Form inputs={images} onSubmit={save} />
           </div>
         </main>
       </div>

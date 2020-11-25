@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useDropzone } from "react-dropzone";
 
-import Form from "../../features/Session/Form";
+import Form from "../../features/Sessions/Session/Form";
 
 export default function New() {
   const router = useRouter();
@@ -13,7 +13,6 @@ export default function New() {
   const upload = async (files) => {
     const url = `https://api.cloudinary.com/v1_1/koda-studio/image/upload`;
     const formData = new FormData();
-    // const uploadedImages = [];
     await files.map((file) => {
       formData.append("file", file);
       formData.append("upload_preset", "unsigned");
@@ -26,11 +25,6 @@ export default function New() {
           return response.json();
         })
         .then((data) => {
-          // uploadedImages.push({
-          //   public_id: data.public_id,
-          //   url: data.url,
-          //   signature: data.signature,
-          // });
           setImages((images) => [
             ...images,
             {
@@ -49,7 +43,7 @@ export default function New() {
       await images.map((image) => {
         try {
           fetch("/api/deleteImage", {
-            method: "POST",
+            method: "DELETE",
             body: JSON.stringify(image),
             headers: {
               "Content-Type": "application/json",
@@ -126,17 +120,17 @@ export default function New() {
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Artsy Fartsy
+                  Add Photos
                 </h3>
                 <p className="mt-1 text-sm leading-5 text-gray-500">
-                  This is a retry of the first attempt.
+                  Upload the photos that you would like to draw.
                 </p>
               </div>
               <div className="mt-5 md:mt-0 md:col-span-2">
                 <form>
                   <div {...getRootProps()}>
                     <label className="block text-sm font-medium leading-5 text-gray-700">
-                      Photo Upload
+                      Photo Uploads
                     </label>
                     <input
                       {...getInputProps()}

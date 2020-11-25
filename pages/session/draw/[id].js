@@ -67,7 +67,7 @@ const Timer = ({ expiryTimestamp, onExpire }) => {
 };
 
 export default function Draw({ session }) {
-  const imageCount = session.data.session.length;
+  const imageCount = session.data.session.images.length;
   const [activeIndex, { inc, dec, reset }] = useIncrement({
     maxValue: imageCount,
     minValue: 0,
@@ -77,14 +77,14 @@ export default function Draw({ session }) {
   return (
     <div>
       <Head>
-        <title>Draw</title>
+        <title>{session.data.session.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="w-screen h-screen text-white bg-gray-100">
-        {activeIndex < session.data.session.length ? (
+        {activeIndex < session.data.session.images.length ? (
           <div className="w-full h-full">
-            {session.data.session.map((image, idx) => {
+            {session.data.session.images.map((image, idx) => {
               const time = new Date();
               time.setSeconds(time.getSeconds() + image.time * 60); // 10 minutes timer
               if (activeIndex === idx) {

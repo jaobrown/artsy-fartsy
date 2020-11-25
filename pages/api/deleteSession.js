@@ -1,14 +1,12 @@
-import { createImage } from "../../utils/fauna";
+import { deleteSession } from "../../utils/fauna";
 export default async function handler(req, res) {
-  const { imageUrl } = req.body;
-
-  if (req.method !== "POST") {
+  if (req.method !== "DELETE") {
     return res.status(405).json({ msg: "Method not allowed" });
   }
 
   try {
-    const createdImage = await createImage(imageUrl);
-    return res.status(200).json(createdImage);
+    const deleted = await deleteSession(req.body);
+    return res.status(200).json(deleted);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Something went wrong." });

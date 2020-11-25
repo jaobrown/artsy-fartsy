@@ -16,6 +16,24 @@ const Form = ({ onSubmit, inputs: images }) => {
       className="space-y-5"
       id="create-session-form"
     >
+      <div className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6">
+        <div className="col-span-6 sm:col-span-4">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Session Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            className="block w-full mt-1 border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            name="title"
+            ref={register({ required: true })}
+            placeholder="Warm up session"
+          />
+        </div>
+      </div>
       {inputs.map((image, idx) => (
         <div
           className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6"
@@ -37,6 +55,18 @@ const Form = ({ onSubmit, inputs: images }) => {
                   name={`images[${idx}][image]`}
                   ref={register({ required: true })}
                   defaultValue={image.url}
+                />
+              </span>
+              <span className="sr-only">
+                <label htmlFor={`images[${idx}][public_id]`}>
+                  cloudinary public id
+                </label>
+                <input
+                  type="text"
+                  id={`images[${idx}][public_id]`}
+                  name={`images[${idx}][public_id]`}
+                  ref={register({ required: true })}
+                  defaultValue={image.public_id}
                 />
               </span>
             </div>
@@ -68,19 +98,6 @@ const Form = ({ onSubmit, inputs: images }) => {
           </div>
         </div>
       ))}
-      {/* Actions Start */}
-      {/* {images.length > 0 && (
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    form="create-session-form"
-                    className="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Start Drawing
-                  </button>
-                </div>
-              )} */}
-      {/* Actions End */}
     </form>
   );
 };

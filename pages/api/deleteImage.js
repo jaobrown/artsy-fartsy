@@ -2,7 +2,7 @@ import { deleteImage } from "../../utils/cloudinary";
 export default async function handler(req, res) {
   const { public_id } = req.body;
 
-  if (req.method !== "POST") {
+  if (req.method !== "DELETE") {
     return res.status(405).json({ msg: "Method not allowed" });
   }
 

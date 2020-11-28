@@ -5,7 +5,7 @@ import { useTimer } from "react-timer-hook";
 import { getSessionById } from "../../../utils/fauna";
 import { useIncrement } from "../../../hooks";
 
-const Timer = ({ expiryTimestamp, onExpire }) => {
+const Timer = ({ expiryTimestamp, onExpire, increment, decrement }) => {
   const {
     seconds,
     minutes,
@@ -19,12 +19,12 @@ const Timer = ({ expiryTimestamp, onExpire }) => {
     onExpire: () => onExpire(),
   });
   return (
-    <div className="relative flex flex-col items-center justify-center">
-      <span className="absolute font-bold -top-6">
+    <div className="relative flex flex-row-reverse items-center justify-center space-x-3">
+      <span className="ml-5 text-xl font-medium">
         {minutes}:{seconds}
       </span>
-      {isRunning ? (
-        <button onClick={pause} className="w-10 h-10">
+      <span className="flex p-2 bg-gray-800 rounded-lg">
+        <button onClick={increment} className="w-8 h-8">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -35,12 +35,54 @@ const Timer = ({ expiryTimestamp, onExpire }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M13 5l7 7-7 7M5 5l7 7-7 7"
             />
           </svg>
         </button>
-      ) : (
-        <button onClick={resume} className="w-10 h-10">
+      </span>
+      <span className="flex p-2 bg-gray-800 rounded-lg">
+        {isRunning ? (
+          <button onClick={pause} className="w-8 h-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
+        ) : (
+          <button onClick={resume} className="w-8 h-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
+        )}
+      </span>
+      <span className="flex p-2 bg-gray-800 rounded-lg">
+        <button onClick={decrement} className="w-8 h-8">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -51,17 +93,11 @@ const Timer = ({ expiryTimestamp, onExpire }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
             />
           </svg>
         </button>
-      )}
+      </span>
     </div>
   );
 };
@@ -86,7 +122,7 @@ export default function Draw({ session }) {
           <div className="w-full h-full">
             {session.data.session.images.map((image, idx) => {
               const time = new Date();
-              time.setSeconds(time.getSeconds() + image.time * 60); // 10 minutes timer
+              time.setSeconds(time.getSeconds() + image.time * 60);
               if (activeIndex === idx) {
                 return (
                   <div key={idx} className="w-full h-full">
@@ -97,38 +133,21 @@ export default function Draw({ session }) {
                       />
                     </div>
 
-                    <div className="fixed inset-x-0 bottom-0 flex items-center justify-center px-10 py-5 pt-10 transition duration-150 hover:text-gray-700 hover:bg-gray-100">
-                      <button onClick={dec} className="w-7 h-7">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-                          />
-                        </svg>
-                      </button>
-                      <Timer expiryTimestamp={time} onExpire={inc} />
-                      <button onClick={inc} className="w-7 h-7">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 5l7 7-7 7M5 5l7 7-7 7"
-                          />
-                        </svg>
-                      </button>
+                    <div className="fixed inset-x-0 bottom-0 pb-2 sm:pb-5">
+                      <div className="max-w-xl px-2 mx-auto sm:px-6 lg:px-8">
+                        <div className="p-2 bg-gray-900 rounded-lg shadow-lg sm:p-3">
+                          <div className="flex flex-wrap items-center justify-between">
+                            <div className="flex items-center flex-1 w-0">
+                              <Timer
+                                expiryTimestamp={time}
+                                onExpire={inc}
+                                increment={inc}
+                                decrement={dec}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );

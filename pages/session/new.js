@@ -60,7 +60,7 @@ export default function New() {
   // Save to session
   const save = async (data) => {
     try {
-      fetch("/api/createSession", {
+      await fetch("/api/createSession", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

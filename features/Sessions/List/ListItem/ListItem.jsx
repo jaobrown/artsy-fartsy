@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { Image, Transformation } from "cloudinary-react";
 
 import { useToggle } from "../../../../hooks";
 
@@ -97,21 +98,31 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                       {session.data.session.images.map((image, idx) => {
                         if (idx === 0) {
                           return (
-                            <img
+                            <Image
+                              alt={`${image.public_id}`}
                               key={idx}
+                              publicId={image.public_id}
                               className="inline-block w-6 h-6 rounded-full ring-2 ring-white"
-                              src={image.image}
-                              alt="hello"
-                            />
+                            >
+                              <Transformation
+                                quality="auto"
+                                fetchFormat="auto"
+                              />
+                            </Image>
                           );
                         } else {
                           return (
-                            <img
+                            <Image
+                              alt={`${image.public_id}`}
                               key={idx}
+                              publicId={image.public_id}
                               className="inline-block w-6 h-6 -ml-1 rounded-full ring-2 ring-white"
-                              src={image.image}
-                              alt="hello"
-                            />
+                            >
+                              <Transformation
+                                quality="auto"
+                                fetchFormat="auto"
+                              />
+                            </Image>
                           );
                         }
                       })}

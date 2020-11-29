@@ -1,6 +1,8 @@
 import * as React from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { AnimateSharedLayout, motion } from "framer-motion";
+
 import { default as AllSessions } from "../features/Sessions/List/List";
 
 export default function Home() {
@@ -28,9 +30,14 @@ export default function Home() {
           </div>
           {/* Section header end */}
 
-          <div className="mt-5 overflow-hidden bg-white shadow sm:rounded-md">
-            <AllSessions />
-          </div>
+          <AnimateSharedLayout>
+            <motion.div
+              layout
+              className="mt-5 overflow-hidden bg-white shadow sm:rounded-md"
+            >
+              <AllSessions />
+            </motion.div>
+          </AnimateSharedLayout>
         </main>
       </div>
     </div>

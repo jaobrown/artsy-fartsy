@@ -9,9 +9,11 @@
     "postbuild": "next-on-netlify"
   },
   "dependencies": {
+    "@popmotion/popcorn": "^0.4.4",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/typography": "^0.3.1",
+    "array-move": "^3.0.1",
     "cloudinary": "^1.23.0",
     "cloudinary-react": "^1.6.8",
     "faunadb": "^4.0.0",

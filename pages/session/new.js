@@ -1,28 +1,28 @@
-import * as React from "react";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useDropzone } from "react-dropzone";
+import * as React from 'react'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useDropzone } from 'react-dropzone'
 
-import Form from "../../features/Sessions/Session/Form";
+import Form from '../../features/sessions/Session/Form'
 
 export default function New() {
-  const router = useRouter();
-  const [images, setImages] = React.useState([]);
+  const router = useRouter()
+  const [images, setImages] = React.useState([])
 
   // Upload (called on file drop)
   const upload = async (files) => {
-    const url = `https://api.cloudinary.com/v1_1/koda-studio/image/upload`;
-    const formData = new FormData();
+    const url = `https://api.cloudinary.com/v1_1/koda-studio/image/upload`
+    const formData = new FormData()
     await files.map((file) => {
-      formData.append("file", file);
-      formData.append("upload_preset", "unsigned");
+      formData.append('file', file)
+      formData.append('upload_preset', 'unsigned')
 
       fetch(url, {
-        method: "POST",
+        method: 'POST',
         body: formData,
       })
         .then((response) => {
-          return response.json();
+          return response.json()
         })
         .then((data) => {
           setImages((images) => [
@@ -32,52 +32,52 @@ export default function New() {
               url: data.url,
               signature: data.signature,
             },
-          ]);
-        });
-    });
-  };
+          ])
+        })
+    })
+  }
 
   // Cancel - deletes uploaded images from cloudinary, pushes to home
   const cancel = async () => {
     if (images.length > 0) {
       await images.map((image) => {
         try {
-          fetch("/api/deleteImage", {
-            method: "DELETE",
+          fetch('/api/deleteImage', {
+            method: 'DELETE',
             body: JSON.stringify(image),
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
-          });
+          })
         } catch (err) {
-          console.error(err);
+          console.error(err)
         }
-      });
+      })
     }
-    router.push("/");
-  };
+    router.push('/')
+  }
 
   // Save to session
   const save = async (data) => {
     try {
-      await fetch("/api/createSession", {
-        method: "POST",
+      await fetch('/api/createSession', {
+        method: 'POST',
         body: JSON.stringify(data),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-    router.push("/");
-  };
+    router.push('/')
+  }
 
   // Drop zone setup
   const onDrop = React.useCallback((acceptedFiles) => {
-    upload(acceptedFiles);
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+    upload(acceptedFiles)
+  }, [])
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
     <div className="min-h-screen px-4 py-5 bg-gray-100 sm:p-6">
@@ -159,7 +159,7 @@ export default function New() {
                           <p className="mt-1 text-sm text-gray-600">
                             <span className="font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                               Click
-                            </span>{" "}
+                            </span>{' '}
                             or drop files to upload
                           </p>
                         )}
@@ -176,10 +176,10 @@ export default function New() {
           {/* Upload end */}
 
           <div className="mt-5">
-            <Form inputs={images} onSubmit={save} />
+            <Form inputs={images} onSubmit={save} id="create-session-form" />
           </div>
         </main>
       </div>
     </div>
-  );
+  )
 }

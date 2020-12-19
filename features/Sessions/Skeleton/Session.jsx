@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const SessionSkeleton = () => {
   return (
@@ -28,7 +28,7 @@ const SessionSkeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SessionSkeleton;
+export default SessionSkeleton

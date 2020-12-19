@@ -1,52 +1,52 @@
-import * as React from "react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Image, Transformation } from "cloudinary-react";
+import * as React from 'react'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Image, Transformation } from 'cloudinary-react'
 
-import { useToggle } from "../../../../hooks";
+import { useToggle } from '../../../../library/hooks'
 
-const ListItem = ({ session, isLastItem, sessionDeleted }) => {
-  const { isToggled, toggle } = useToggle(false);
-  const [isDeleted, setIsDeleted] = React.useState(false);
+const ListItem = ({ session, sessionDeleted }) => {
+  const { isToggled, toggle } = useToggle(false)
+  const [isDeleted, setIsDeleted] = React.useState(false)
 
-  let duration = 0;
-  let imageCount = session.data.session.images.length;
+  let duration = 0
+  let imageCount = session.data.session.images.length
   session.data.session.images.map((image) => {
-    const imageTime = parseInt(image.time);
-    duration += imageTime;
-  });
+    const imageTime = parseInt(image.time)
+    duration += imageTime
+  })
 
   const deleteSession = async (session) => {
     await session.data.session.images.map((image) => {
       try {
-        fetch("/api/deleteImage", {
-          method: "DELETE",
+        fetch('/api/deleteImage', {
+          method: 'DELETE',
           body: JSON.stringify(image),
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-        });
+        })
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
-    });
+    })
 
-    setIsDeleted(true);
+    setIsDeleted(true)
 
     try {
-      await fetch("/api/deleteSession", {
-        method: "DELETE",
+      await fetch('/api/deleteSession', {
+        method: 'DELETE',
         body: JSON.stringify(session.id),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
 
-    sessionDeleted();
-  };
+    sessionDeleted()
+  }
 
   return (
     <AnimatePresence>
@@ -58,7 +58,7 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 0 }}
         >
-          <div className="block hover:bg-gray-50">
+          <div className="block hover:bg-gray-50 sm:rounded-md">
             <div className="flex items-center px-4 sm:px-6">
               <Link href={`/session/draw/${session.id}`}>
                 <a className="flex-1 min-w-0 py-4 sm:flex sm:items-center sm:justify-between">
@@ -86,8 +86,8 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                           />
                         </svg>
                         <p>
-                          Estimated Duration:{" "}
-                          <span className="font-medium">{duration}</span>{" "}
+                          Estimated Duration:{' '}
+                          <span className="font-medium">{duration}</span>{' '}
                           minutes
                         </p>
                       </div>
@@ -109,7 +109,7 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                                 fetchFormat="auto"
                               />
                             </Image>
-                          );
+                          )
                         } else {
                           return (
                             <Image
@@ -123,7 +123,7 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                                 fetchFormat="auto"
                               />
                             </Image>
-                          );
+                          )
                         }
                       })}
                     </div>
@@ -131,7 +131,7 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                 </a>
               </Link>
               <div className="flex items-center flex-shrink-0 ml-5">
-                <div className="relative inline-block text-left">
+                <div className="relative inline-block text-left ">
                   <div>
                     <button
                       onClick={toggle}
@@ -153,13 +153,22 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                     </button>
                   </div>
                   {isToggled && (
-                    <div
-                      className={
-                        isLastItem
-                          ? `absolute right-full top-0 w-56 -mt-2 mr-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5`
-                          : `origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5`
-                      }
-                    >
+                    <div className="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                      <div
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                      >
+                        <Link href={`/session/edit/${session.id}`}>
+                          <a
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                            role="menuitem"
+                          >
+                            Edit
+                          </a>
+                        </Link>
+                      </div>
                       <div
                         className="py-1"
                         role="menu"
@@ -168,7 +177,7 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
                       >
                         <button
                           onClick={() => deleteSession(session)}
-                          className="block w-full px-4 py-2 text-sm text-left text-red-700 hover:bg-gray-100 hover:text-red-800 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                          className="block w-full px-4 py-2 text-sm text-left text-red-700 hover:bg-red-100 hover:text-red-800 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                           role="menuitem"
                         >
                           Delete
@@ -183,7 +192,7 @@ const ListItem = ({ session, isLastItem, sessionDeleted }) => {
         </motion.li>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}
 
-export default ListItem;
+export default ListItem

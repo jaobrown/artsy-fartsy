@@ -1,14 +1,14 @@
-import { deleteSession } from "../../utils/fauna";
+import { deleteSession } from '../../vendors/fauna'
 export default async function handler(req, res) {
-  if (req.method !== "DELETE") {
-    return res.status(405).json({ msg: "Method not allowed" });
+  if (req.method !== 'DELETE') {
+    return res.status(405).json({ msg: 'Method not allowed' })
   }
 
   try {
-    const deleted = await deleteSession(req.body);
-    return res.status(200).json(deleted);
+    const deleted = await deleteSession(req.body)
+    return res.status(200).json(deleted)
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Something went wrong." });
+    console.error(err)
+    res.status(500).json({ msg: 'Something went wrong.' })
   }
 }

@@ -1,12 +1,12 @@
-import * as React from "react";
-import Head from "next/head";
-import Link from "next/link";
-import { useTimer } from "react-timer-hook";
-import { Image, Transformation } from "cloudinary-react";
-import { motion, AnimatePresence } from "framer-motion";
+import * as React from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
+import { useTimer } from 'react-timer-hook'
+import { Image, Transformation } from 'cloudinary-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-import { getSessionById } from "../../../utils/fauna";
-import { useIncrement } from "../../../hooks";
+import { getSessionById } from '../../../vendors/fauna'
+import { useIncrement } from '../../../library/hooks'
 
 const Timer = ({ expiryTimestamp, onExpire, increment, decrement }) => {
   const {
@@ -20,7 +20,7 @@ const Timer = ({ expiryTimestamp, onExpire, increment, decrement }) => {
   } = useTimer({
     expiryTimestamp,
     onExpire: () => onExpire(),
-  });
+  })
   return (
     <div className="relative flex flex-row-reverse items-center justify-center space-x-3">
       <span className="w-16 h-8 ml-6 text-xl font-medium">
@@ -103,16 +103,16 @@ const Timer = ({ expiryTimestamp, onExpire, increment, decrement }) => {
         </button>
       </span>
     </div>
-  );
-};
+  )
+}
 
 export default function Draw({ session }) {
-  const imageCount = session.data.session.images.length;
+  const imageCount = session.data.session.images.length
   const [activeIndex, { inc, dec, reset }] = useIncrement({
     maxValue: imageCount,
     minValue: 0,
     step: 1,
-  });
+  })
 
   return (
     <div>
@@ -126,8 +126,8 @@ export default function Draw({ session }) {
           <div className="w-full h-full">
             <AnimatePresence>
               {session.data.session.images.map((image, idx) => {
-                const time = new Date();
-                time.setSeconds(time.getSeconds() + image.time * 60);
+                const time = new Date()
+                time.setSeconds(time.getSeconds() + image.time * 60)
                 if (activeIndex === idx) {
                   return (
                     <div key={idx} className="w-full h-full">
@@ -157,11 +157,11 @@ export default function Draw({ session }) {
                                   decrement={dec}
                                 />
                                 <div className="ml-3 text-sm font-medium text-gray-400">
-                                  Drawing{" "}
+                                  Drawing{' '}
                                   <span className="text-white">
                                     {activeIndex + 1}
-                                  </span>{" "}
-                                  of{" "}
+                                  </span>{' '}
+                                  of{' '}
                                   <span className="text-white">
                                     {imageCount}
                                   </span>
@@ -172,9 +172,9 @@ export default function Draw({ session }) {
                         </div>
                       </div>
                     </div>
-                  );
+                  )
                 }
-                return;
+                return
               })}
             </AnimatePresence>
           </div>
@@ -250,20 +250,20 @@ export default function Draw({ session }) {
         )}
       </main>
     </div>
-  );
+  )
 }
 
 export async function getServerSideProps(context) {
   try {
-    const id = context.params.id;
-    const session = await getSessionById(id);
+    const id = context.params.id
+    const session = await getSessionById(id)
     return {
       props: { session },
-    };
+    }
   } catch (error) {
-    console.error(error);
-    context.res.statusCode = 302;
-    context.res.setHeader("Location", `/`);
-    return { props: {} };
+    console.error(error)
+    context.res.statusCode = 302
+    context.res.setHeader('Location', `/`)
+    return { props: {} }
   }
 }

@@ -37,7 +37,6 @@ export default function New() {
               signature: data.signature,
             },
           ])
-          console.log(images)
         })
     })
   }

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { AnimateSharedLayout, motion } from 'framer-motion'
 
-import { default as AllSessions } from '@/features/Sessions/List/List'
+import { default as AllSessions } from '@/features/sessions/List/List'
 
 export default function Home() {
   return (

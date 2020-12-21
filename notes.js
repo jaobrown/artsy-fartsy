@@ -20,9 +20,6 @@ const cloudinaryCleanUp = () => {
 //? Refactoring 🤷‍♀️
 //
 //? Features 🏕
-// todo: Delete image inputs while editing a session
-// todo: Browser image compression prior to upload
-// todo: Clean up functions
 // todo: Auth + tie sessions and images to users
 // todo: File storage limits per account (could be set via max # of images, if file max size is set during image compressoion - just do some basic math here)
 // todo: Draggable/collapsable timer component

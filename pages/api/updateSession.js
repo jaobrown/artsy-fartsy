@@ -1,4 +1,4 @@
-import { updateSession } from '../../vendors/fauna'
+import { updateSession } from '@/vendors/fauna'
 export default async function handler(req, res) {
   const session = req.body
   console.log(

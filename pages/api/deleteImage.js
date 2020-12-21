@@ -1,4 +1,4 @@
-import { deleteImage } from '../../vendors/cloudinary'
+import { deleteImage } from '@/vendors/cloudinary'
 export default async function handler(req, res) {
   const { public_id } = req.body
 

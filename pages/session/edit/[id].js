@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
-import Form from '../../../features/Sessions/Session/Form'
+import SessionForm from '@/features/Sessions/Forms/SessionForm'
 
-import { getSessionById } from '../../../vendors/fauna'
+import { getSessionById } from '@/vendors/fauna'
 
 export default function Edit({ session }) {
   console.log('Edit -> session', session)
@@ -162,7 +162,7 @@ export default function Edit({ session }) {
           {/* Upload end */}
 
           <div className="mt-5">
-            <Form
+            <SessionForm
               inputs={images}
               onSubmit={update}
               mode="edit"

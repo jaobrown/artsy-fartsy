@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Image, Transformation } from 'cloudinary-react'
 
-import { useToggle } from '../../../../library/hooks'
+import { useToggle } from '@/hooks'
 
 const ListItem = ({ session, sessionDeleted }) => {
   const { isToggled, toggle } = useToggle(false)

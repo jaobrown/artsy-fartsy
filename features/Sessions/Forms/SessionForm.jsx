@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { Image, Transformation } from 'cloudinary-react'
 
-import { usePositionReorder, useMeasurePosition } from '../../../library/hooks'
+import { usePositionReorder, useMeasurePosition } from '@/hooks'
 
-const Form = ({ onSubmit, title, inputs: images, mode, id }) => {
+const SessionForm = ({ onSubmit, title, inputs: images, mode, id }) => {
   const { register, handleSubmit, errors } = useForm()
 
   const editMode = mode === 'edit'
@@ -147,4 +147,4 @@ function DragItem({ image, updatePosition, updateOrder, idx, children }) {
   )
 }
 
-export default Form
+export default SessionForm

@@ -13,7 +13,7 @@ const List = () => {
       {!sessions && <SessionSkeleton />}
       {sessions &&
         sessions.length > 0 &&
-        sessions.map((session, idx) => {
+        sessions.map((session) => {
           return (
             <ListItem
               session={session}

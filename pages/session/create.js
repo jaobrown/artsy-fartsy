@@ -3,9 +3,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
-import { Button, Main, PageHeader } from '../../library/components'
+import { Button, Main, PageHeader } from '@/components'
 
-import Form from '../../features/sessions/Session/Form'
+import SessionForm from '@/features/sessions/Forms/SessionForm'
 
 export default function New() {
   const PageTitle = 'Create Session'
@@ -166,7 +166,11 @@ export default function New() {
         {/* Upload end */}
 
         <div className="mt-5">
-          <Form inputs={images} onSubmit={save} id="create-session-form" />
+          <SessionForm
+            inputs={images}
+            onSubmit={save}
+            id="create-session-form"
+          />
         </div>
       </Main>
     </>

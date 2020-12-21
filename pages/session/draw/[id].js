@@ -5,8 +5,8 @@ import { useTimer } from 'react-timer-hook'
 import { Image, Transformation } from 'cloudinary-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-import { getSessionById } from '../../../vendors/fauna'
-import { useIncrement } from '../../../library/hooks'
+import { getSessionById } from '@/vendors/fauna'
+import { useIncrement } from '@/hooks'
 
 const Timer = ({ expiryTimestamp, onExpire, increment, decrement }) => {
   const {

@@ -1,4 +1,4 @@
-import { deleteSession } from '../../vendors/fauna'
+import { deleteSession } from '@/vendors/fauna'
 export default async function handler(req, res) {
   if (req.method !== 'DELETE') {
     return res.status(405).json({ msg: 'Method not allowed' })

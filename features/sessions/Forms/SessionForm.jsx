@@ -95,6 +95,8 @@ const SessionForm = ({ onSubmit, title, inputs: images, mode, id }) => {
                 <div className="relative flex mt-1 rounded-md shadow-sm">
                   <input
                     type="number"
+                    onWheel={(e) => e.target.blur()}
+                    min={1}
                     id={`images[${idx}][time]`}
                     className="relative z-20 flex-1 block w-full px-3 py-2 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
                     placeholder="3"

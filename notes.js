@@ -15,7 +15,7 @@ const cloudinaryCleanUp = () => {
   //
 }
 
-//! Mini "todo" list
+
 //
 //? Refactoring 🤷‍♀️
 //

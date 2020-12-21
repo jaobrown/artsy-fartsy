@@ -1,34 +1,86 @@
 import * as React from 'react'
 import Head from 'next/head'
-// import { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
 import { Button, Main, PageHeader } from '../../library/components'
 
-const initialState = { images: [] }
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'upload':
-      return { images: [...state.images, ...action.payload] }
-    case 'save':
-      return console.log(action.type)
-    case 'cancel':
-      return console.log(action.type)
-    default:
-      throw new Error()
-  }
-}
+import Form from '../../features/sessions/Session/Form'
 
 export default function New() {
   const PageTitle = 'Create Session'
 
-  const [state, dispatch] = React.useReducer(reducer, initialState)
+  const router = useRouter()
+  const [images, setImages] = React.useState([])
+
+  // Upload (called on file drop)
+  const upload = async (files) => {
+    const url = `https://api.cloudinary.com/v1_1/koda-studio/image/upload`
+    const formData = new FormData()
+    await files.map((file) => {
+      formData.append('file', file)
+      formData.append('upload_preset', 'unsigned')
+
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          setImages((images) => [
+            ...images,
+            {
+              public_id: data.public_id,
+              url: data.url,
+              signature: data.signature,
+            },
+          ])
+          console.log(images)
+        })
+    })
+  }
+
+  // Cancel - deletes uploaded images from cloudinary, pushes to home
+  const cancel = async () => {
+    if (images.length > 0) {
+      await images.map((image) => {
+        try {
+          fetch('/api/deleteImage', {
+            method: 'DELETE',
+            body: JSON.stringify(image),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+        } catch (err) {
+          console.error(err)
+        }
+      })
+    }
+    router.push('/')
+  }
+
+  // Save to session
+  const save = async (data) => {
+    try {
+      await fetch('/api/createSession', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    } catch (err) {
+      console.error(err)
+    }
+    router.push('/')
+  }
 
   // Drop zone setup
   const onDrop = React.useCallback((acceptedFiles) => {
-    dispatch({ type: 'upload', payload: acceptedFiles })
-    // console.log(acceptedFiles)
+    upload(acceptedFiles)
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
@@ -41,21 +93,15 @@ export default function New() {
       <Main>
         <PageHeader title={PageTitle}>
           <PageHeader.Actions>
-            <Button
-              onClick={() => dispatch({ type: 'cancel' })}
-              color="secondary"
-            >
+            <Button onClick={() => cancel()} color="secondary">
               Cancel
             </Button>
 
-            <Button
-              color="primary"
-              // type="submit"
-              onClick={() => dispatch({ type: 'save' })}
-              // form="create-session-form"
-            >
-              Save and return
-            </Button>
+            {images.length > 0 && (
+              <Button color="primary" type="submit" form="create-session-form">
+                Save and return
+              </Button>
+            )}
           </PageHeader.Actions>
         </PageHeader>
 
@@ -118,6 +164,10 @@ export default function New() {
           </div>
         </div>
         {/* Upload end */}
+
+        <div className="mt-5">
+          <Form inputs={images} onSubmit={save} id="create-session-form" />
+        </div>
       </Main>
     </>
   )

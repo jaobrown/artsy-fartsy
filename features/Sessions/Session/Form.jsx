@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
-import { motion, useMotionValue } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Image, Transformation } from 'cloudinary-react'
 
 import { usePositionReorder, useMeasurePosition } from '../../../library/hooks'
@@ -16,10 +16,13 @@ const Form = ({ onSubmit, title, inputs: images, mode, id }) => {
     inputs
   )
 
-  React.useEffect(async () => {
-    await setInputs(images)
-    setOrder(inputs)
+  React.useEffect(() => {
+    setInputs(images)
   }, [images])
+
+  React.useEffect(() => {
+    setOrder(inputs)
+  }, [inputs])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" id={id}>
@@ -61,22 +64,18 @@ const Form = ({ onSubmit, title, inputs: images, mode, id }) => {
                 >
                   <Transformation quality="auto" fetchFormat="auto" />
                 </Image>
-                <span className="sr-only">
-                  <label htmlFor={`images[${idx}][image]`}>image</label>
+                <span className="hidden">
                   <input
-                    type="url"
+                    type="hidden"
                     id={`images[${idx}][image]`}
                     name={`images[${idx}][image]`}
                     ref={register({ required: true })}
                     defaultValue={image.url}
                   />
                 </span>
-                <span className="sr-only">
-                  <label htmlFor={`images[${idx}][public_id]`}>
-                    cloudinary public id
-                  </label>
+                <span className="hidden">
                   <input
-                    type="text"
+                    type="hidden"
                     id={`images[${idx}][public_id]`}
                     name={`images[${idx}][public_id]`}
                     ref={register({ required: true })}
@@ -118,10 +117,6 @@ const Form = ({ onSubmit, title, inputs: images, mode, id }) => {
   )
 }
 
-function DragList() {
-  return <div>{children}</div>
-}
-
 function DragItem({ image, updatePosition, updateOrder, idx, children }) {
   const [isDragging, setIsDragging] = React.useState(false)
 
@@ -129,36 +124,26 @@ function DragItem({ image, updatePosition, updateOrder, idx, children }) {
     updatePosition(idx, pos)
   })
 
-  const y = useMotionValue()
-
   return (
-    <div className="flex">
-      <motion.div
-        layout
-        drag="y"
-        ref={ref}
-        dragElastic={1}
-        dragConstraints={{ top: 0, bottom: 0 }}
-        key={image.public_id}
-        animate={{ scale: isDragging ? 1.05 : 1 }}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => setIsDragging(false)}
-        onViewportBoxUpdate={(_, delta) => {
-          if (isDragging) {
-            updateOrder(idx, delta.y.translate)
-          }
-          y.set(delta.y.translate)
-        }}
-      >
-        Drag Handle
-      </motion.div>
-      <motion.div
-        style={{ y }}
-        className="flex px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6"
-      >
-        {children}
-      </motion.div>
-    </div>
+    <motion.div
+      layout
+      drag="y"
+      ref={ref}
+      dragElastic={1}
+      dragConstraints={{ top: 0, bottom: 0 }}
+      key={image.public_id}
+      animate={{ scale: isDragging ? 1.05 : 1 }}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={() => setIsDragging(false)}
+      onViewportBoxUpdate={(_, delta) => {
+        if (isDragging) {
+          updateOrder(idx, delta.y.translate)
+        }
+      }}
+      className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6 cursor-move"
+    >
+      {children}
+    </motion.div>
   )
 }
 

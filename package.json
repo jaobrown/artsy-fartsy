@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "postbuild": "next-on-netlify"
+    "postbuild": "next-on-netlify",
+    "release": "standard-version"
   },
   "dependencies": {
     "@popmotion/popcorn": "^0.4.4",
@@ -27,5 +28,13 @@
     "react-timer-hook": "^2.0.3",
     "swr": "^0.3.9",
     "tailwindcss": "^2.0.1"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

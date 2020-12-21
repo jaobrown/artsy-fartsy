@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
-import SessionForm from '@/features/Sessions/Forms/SessionForm'
+import SessionForm from '@/features/sessions/Forms/SessionForm'
 
 import { getSessionById } from '@/vendors/fauna'
 

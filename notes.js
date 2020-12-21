@@ -13,20 +13,13 @@ const cloudinaryCleanUp = () => {
   //
   // delete cloudinary assets that are not being used
   //
-};
+}
 
 //! Mini "todo" list
 //
 //? Refactoring 🤷‍♀️
-// todo: Refactor `/new` to useReducer
-// todo: Refactor form component to useFieldArray with reset() + useReducer
-// todo: Refactor to smaller / compound components
 //
 //? Features 🏕
-// todo: Write tests for existing features after refactor
-// todo: UX feedback for uploads
-// todo: Edit page
-// todo: Drag and reorder form inputs
 // todo: Delete image inputs while editing a session
 // todo: Browser image compression prior to upload
 // todo: Clean up functions

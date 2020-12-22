@@ -1,14 +1,14 @@
 import * as React from 'react'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { Image, Transformation } from 'cloudinary-react'
 
 import { usePositionReorder, useMeasurePosition } from '@/hooks'
 
-const SessionForm = ({ onSubmit, title, inputs: images, mode, id }) => {
+const SessionForm = ({ title, inputs: images, editMode, id, sessionId }) => {
+  const router = useRouter()
   const { register, handleSubmit, errors } = useForm()
-
-  const editMode = mode === 'edit'
 
   const [inputs, setInputs] = React.useState([])
 
@@ -28,8 +28,45 @@ const SessionForm = ({ onSubmit, title, inputs: images, mode, id }) => {
     e.blur()
   }
 
+  // Save to session
+  const save = async (data) => {
+    try {
+      await fetch('/api/createSession', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    } catch (err) {
+      console.error(err)
+    }
+    router.push('/')
+  }
+
+  // update to session
+  const update = async (data) => {
+    const session = data
+    try {
+      await fetch('/api/updateSession', {
+        method: 'POST',
+        body: JSON.stringify({ session, sessionId }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    } catch (err) {
+      console.error(err)
+    }
+    router.push('/')
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" id={id}>
+    <form
+      onSubmit={handleSubmit(editMode ? update : save)}
+      className="space-y-5"
+      id={id}
+    >
       <div className="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6">
         <div className="col-span-6 sm:col-span-4">
           <label
@@ -74,7 +111,7 @@ const SessionForm = ({ onSubmit, title, inputs: images, mode, id }) => {
                     id={`images[${idx}][image]`}
                     name={`images[${idx}][image]`}
                     ref={register({ required: true })}
-                    defaultValue={image.url}
+                    defaultValue={image.image ? image.image : image.url}
                   />
                 </span>
                 <span className="hidden">

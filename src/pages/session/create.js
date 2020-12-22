@@ -61,22 +61,6 @@ export default function New() {
     router.push('/')
   }
 
-  // Save to session
-  const save = async (data) => {
-    try {
-      await fetch('/api/createSession', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-    } catch (err) {
-      console.error(err)
-    }
-    router.push('/')
-  }
-
   // Drop zone setup
   const onDrop = React.useCallback((acceptedFiles) => {
     upload(acceptedFiles)
@@ -165,11 +149,7 @@ export default function New() {
         {/* Upload end */}
 
         <div className="mt-5">
-          <SessionForm
-            inputs={images}
-            onSubmit={save}
-            id="create-session-form"
-          />
+          <SessionForm inputs={images} id="create-session-form" />
         </div>
       </Main>
     </>

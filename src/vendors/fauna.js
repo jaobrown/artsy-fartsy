@@ -38,10 +38,10 @@ const createSession = async (session) => {
   )
 }
 
-const updateSession = async ({ data, id }) => {
+const updateSession = async (session, id) => {
   return await faunaClient.query(
     q.Update(q.Ref(q.Collection('sessions'), id), {
-      data: { data },
+      data: { session },
     })
   )
 }

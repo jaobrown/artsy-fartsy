@@ -1,17 +1,15 @@
 import { updateSession } from '@/vendors/fauna'
 export default async function handler(req, res) {
-  const session = req.body
-  console.log(
-    '🚀 ~ file: updateSession.js ~ line 4 ~ handler ~ session',
-    session
-  )
-
   if (req.method !== 'POST') {
     return res.status(405).json({ msg: 'Method not allowed' })
   }
 
   try {
-    const updatedSession = await updateSession(session)
+    const updatedSession = await updateSession(
+      req.body.session,
+      req.body.sessionId
+    )
+    // const updatedSession = 'haha'
     return res.status(200).json(updatedSession)
   } catch (err) {
     console.error(err)

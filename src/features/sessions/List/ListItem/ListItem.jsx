@@ -154,7 +154,7 @@ const ListItem = ({ session, sessionDeleted }) => {
                   </div>
                   {isToggled && (
                     <div className="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-                      {/* <div
+                      <div
                         className="py-1"
                         role="menu"
                         aria-orientation="vertical"
@@ -168,7 +168,7 @@ const ListItem = ({ session, sessionDeleted }) => {
                             Edit
                           </a>
                         </Link>
-                      </div> */}
+                      </div>
                       <div
                         className="py-1"
                         role="menu"

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
 
 import SessionForm from '@/features/sessions/Forms/SessionForm'
+import { Button } from '@/components'
 
 import { getSessionById } from '@/vendors/fauna'
 
@@ -12,7 +13,6 @@ export default function Edit({ session }) {
   console.log('Edit -> session', session)
   const inputs = session.data.session.images
   const title = session.data.session.title
-  const router = useRouter()
   const [images, setImages] = React.useState(inputs)
 
   // Upload (called on file drop)
@@ -43,23 +43,6 @@ export default function Edit({ session }) {
     })
   }
 
-  // update to session
-  const update = async (data) => {
-    console.log('update function go go go')
-    try {
-      await fetch('/api/updateSession', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-    } catch (err) {
-      console.error(err)
-    }
-    router.push('/')
-  }
-
   // Drop zone setup
   const onDrop = React.useCallback((acceptedFiles) => {
     upload(acceptedFiles)
@@ -88,13 +71,13 @@ export default function Edit({ session }) {
               </Link>
 
               {images.length > 0 && (
-                <button
+                <Button
+                  color="primary"
                   type="submit"
                   form="update-session-form"
-                  className="inline-flex items-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Save and return
-                </button>
+                </Button>
               )}
             </div>
             {/* Actions end */}
@@ -163,9 +146,9 @@ export default function Edit({ session }) {
 
           <div className="mt-5">
             <SessionForm
+              sessionId={session.id}
               inputs={images}
-              onSubmit={update}
-              mode="edit"
+              editMode
               title={title}
               id="update-session-form"
             />

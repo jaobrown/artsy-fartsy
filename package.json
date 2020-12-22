@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "postbuild": "next-on-netlify",
+    "cz": "npx cz",
     "release": "standard-version"
   },
   "dependencies": {
